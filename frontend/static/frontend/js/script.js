@@ -18,7 +18,8 @@
  */
 
 
-const BASE_URL_API = 'http://127.0.0.1:8000/api/'
+const BASE_URL_API = 'http://127.0.0.1:8000/api/';
+let activeItem = null;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -38,6 +39,11 @@ function getCookie(name) {
 
 function getEndpointURL(endpoint) {
     return `${BASE_URL_API}${endpoint}`;
+}
+
+function editItem(item) {
+    activeItem = item;
+    document.querySelector('#title').value = activeItem.title;
 }
 
 function buildList() {
@@ -67,6 +73,13 @@ function buildList() {
 
                 wrapper.innerHTML += item;
             }
+
+            for (let i in tasks) {
+                const editBtn = document.querySelectorAll('.edit')[i];
+                editBtn.addEventListener('click', event => {
+                    editItem(tasks[i]);
+                });
+            }
         });
 
 }
@@ -78,12 +91,20 @@ function main() {
     form.addEventListener('submit', event => {
         event.preventDefault();
 
-        const taskCreateURL = getEndpointURL('task-create/');
         const title = document.querySelector('#title').value;
         const csrftoken = getCookie('csrftoken');
 
-        fetch(taskCreateURL, {
-            method: 'POST',
+        let requestURL = getEndpointURL('task-create/');
+        let method = 'POST';
+
+        if (activeItem) {
+            requestURL = getEndpointURL(`task-update/${activeItem.id}/`);
+            method = 'PUT';
+            activeItem = null;
+        }
+
+        fetch(requestURL, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
