@@ -95,5 +95,65 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<script>
+    /**
+     KEY COMPONENTS:
+     "activeItem" - null until an edit button is clicked. Will contain object of item we are editing
+     "list_snapshot" - Will contain previous state of list. Used for removing extra rows on list update
+
+     PROCESS:
+     1 - Fetch Data and build rows "buildList()"
+     2 - Create Item on form submit
+     3 - Edit Item click - Prefill form and change submit URL
+     4 - Delete Item - Send item id to delete URL
+     5 - Cross out completed task - Event handler update item
+
+     NOTES:
+     -- Add event handlers to "edit", "delete", "title"
+     -- Render with strike through items completed
+     -- Remove extra data on re-render
+     -- CSRF Token
+     */
+
+
+    const BASE_URL_API = 'http://127.0.0.1:8000/api/'
+
+    function getEndpointURL(endpoint) {
+        return `${BASE_URL_API}${endpoint}`;
+    }
+
+    function buildList() {
+        const wrapper = document.querySelector('#list-wrapper');
+        const taskListURL = getEndpointURL('task-list/');
+
+        fetch(taskListURL)
+            .then(response => response.json())
+            .then(tasks => {
+                console.log(tasks)
+
+                for (let i in tasks) {
+                    const item = `
+                        <div id="data-row-${i}" class="task-wrapper flex-wrapper">
+                            <div style="flex:7">
+                                <span class="title">${tasks[i].title}</span>
+                            </div>
+                            <div style="flex:1">
+                                <button class="btn btn-sm btn-outline-info edit">Edit</button>
+                            </div>
+                            <div style="flex:1">
+                                <button class="btn btn-sm btn-outline-dark delete">-</button>
+                            </div>
+                        </div>
+                    `;
+
+                    wrapper.innerHTML += item;
+                }
+            });
+
+    }
+
+    buildList();
+</script>
 </body>
 </html>
