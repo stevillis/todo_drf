@@ -21,6 +21,7 @@
 const BASE_URL_API = 'http://127.0.0.1:8000/api/';
 let activeItem = null;
 
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -37,6 +38,22 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function makeRequest(requestURL, method, body) {
+    const csrftoken = getCookie('csrftoken');
+
+    fetch(requestURL, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: body
+    }).then(() => {
+        buildList();
+        document.querySelector('#form').reset();
+    });
+}
+
 function getEndpointURL(endpoint) {
     return `${BASE_URL_API}${endpoint}`;
 }
@@ -44,6 +61,13 @@ function getEndpointURL(endpoint) {
 function editItem(item) {
     activeItem = item;
     document.querySelector('#title').value = activeItem.title;
+}
+
+function deleteItem(item) {
+    const requestURL = getEndpointURL(`task-delete/${item.id}/`);
+    const method = 'DELETE';
+
+    makeRequest(requestURL, method, null);
 }
 
 function buildList() {
@@ -78,8 +102,14 @@ function buildList() {
 
             for (let i in tasks) {
                 const editBtn = document.querySelectorAll('.edit')[i];
+                const deleteBtn = document.querySelectorAll('.delete')[i];
+
                 editBtn.addEventListener('click', event => {
                     editItem(tasks[i]);
+                });
+
+                deleteBtn.addEventListener('click', event => {
+                    deleteItem(tasks[i]);
                 });
             }
         });
@@ -94,7 +124,7 @@ function main() {
         event.preventDefault();
 
         const title = document.querySelector('#title').value;
-        const csrftoken = getCookie('csrftoken');
+        const body = JSON.stringify({'title': title});
 
         let requestURL = getEndpointURL('task-create/');
         let method = 'POST';
@@ -105,21 +135,7 @@ function main() {
             activeItem = null;
         }
 
-        fetch(requestURL, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify(
-                {
-                    'title': title
-                }
-            )
-        }).then(() => {
-            buildList();
-            document.querySelector('#form').reset();
-        });
+        makeRequest(requestURL, method, body);
     });
 }
 
