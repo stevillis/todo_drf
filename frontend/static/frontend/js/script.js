@@ -54,8 +54,6 @@ function buildList() {
     fetch(taskListURL)
         .then(response => response.json())
         .then(tasks => {
-            console.log(tasks)
-
             for (let i in tasks) {
                 const item = `
                         <div id="data-row-${i}" class="task-wrapper flex-wrapper">
@@ -63,10 +61,14 @@ function buildList() {
                                 <span class="title">${tasks[i].title}</span>
                             </div>
                             <div style="flex:1">
-                                <button class="btn btn-sm btn-outline-info edit">Edit</button>
+                                <button class="btn btn-sm btn-outline-info edit">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
                             </div>
                             <div style="flex:1">
-                                <button class="btn btn-sm btn-outline-dark delete">-</button>
+                                <button class="btn btn-sm btn-outline-dark delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
                         </div>
                     `;

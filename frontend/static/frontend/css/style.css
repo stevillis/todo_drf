@@ -27,13 +27,6 @@ h1, h2, h3, h4, h5, p, span, strike {
     padding: 40px;
 }
 
-#submit {
-    background-color: #36d9b6;
-    border-radius: 0;
-    border: 0;
-    color: #fff;
-}
-
 .flex-wrapper {
     display: flex;
     gap: 10px;
@@ -41,7 +34,6 @@ h1, h2, h3, h4, h5, p, span, strike {
 
 .task-wrapper {
     margin: 5px;
-    padding: 5px;
     padding: 20px;
     cursor: pointer;
     border-bottom: 1px solid #e9e9e9;
