@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .models import Task
@@ -21,4 +22,11 @@ def api_overview(request):
 def task_list(request):
     tasks = Task.objects.all()
     serializer = TaskSerializer(tasks, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def task_detail(request, pk):
+    task = get_object_or_404(Task, id=pk)
+    serializer = TaskSerializer(task, many=False)
     return Response(serializer.data)
