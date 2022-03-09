@@ -10,7 +10,7 @@ from .serializers import TaskSerializer
 def api_overview(request):
     api_urls = {
         'List': '/task-list/',
-        'Detail View': '/task-detail/<str:pk>/',
+        'Detail': '/task-detail/<str:pk>/',
         'Create': '/task-create/',
         'Update': '/task-update/<str:pk>',
         'Delete': '/task-delete/<str:pk>',
@@ -29,4 +29,14 @@ def task_list(request):
 def task_detail(request, pk):
     task = get_object_or_404(Task, id=pk)
     serializer = TaskSerializer(task, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def task_create(request):
+    serializer = TaskSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+
     return Response(serializer.data)
