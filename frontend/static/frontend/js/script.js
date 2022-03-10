@@ -70,6 +70,19 @@ function deleteItem(item) {
     makeRequest(requestURL, method, null);
 }
 
+function strikeUnstrike(item) {
+    const requestURL = getEndpointURL(`task-update/${item.id}/`);
+    const method = 'PUT';
+    const body = JSON.stringify(
+        {
+            'title': item.title,
+            'completed': !item.completed
+        }
+    );
+
+    makeRequest(requestURL, method, body);
+}
+
 function buildList() {
     const wrapper = document.querySelector('#list-wrapper');
     const taskListURL = getEndpointURL('task-list/');
@@ -79,10 +92,13 @@ function buildList() {
         .then(response => response.json())
         .then(tasks => {
             for (let i in tasks) {
+                const title = tasks[i].completed ?
+                    `<span class="title line-through">${tasks[i].title}</span>` :
+                    `<span class="title">${tasks[i].title}</span>`;
                 const item = `
                         <div id="data-row-${i}" class="task-wrapper flex-wrapper">
                             <div style="flex:7">
-                                <span class="title">${tasks[i].title}</span>
+                                ${title}
                             </div>
                             <div style="flex:1">
                                 <button class="btn btn-sm btn-outline-info edit">
@@ -103,6 +119,7 @@ function buildList() {
             for (let i in tasks) {
                 const editBtn = document.querySelectorAll('.edit')[i];
                 const deleteBtn = document.querySelectorAll('.delete')[i];
+                const title = document.querySelectorAll('.title')[i];
 
                 editBtn.addEventListener('click', event => {
                     editItem(tasks[i]);
@@ -110,6 +127,10 @@ function buildList() {
 
                 deleteBtn.addEventListener('click', event => {
                     deleteItem(tasks[i]);
+                });
+
+                title.addEventListener('click', event => {
+                    strikeUnstrike(tasks[i]);
                 });
             }
         });
