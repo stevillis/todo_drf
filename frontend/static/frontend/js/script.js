@@ -20,6 +20,7 @@
 
 const BASE_URL_API = 'http://127.0.0.1:8000/api/';
 let activeItem = null;
+let tasksSnapshot = [];
 
 
 function getCookie(name) {
@@ -87,11 +88,18 @@ function buildList() {
     const wrapper = document.querySelector('#list-wrapper');
     const taskListURL = getEndpointURL('task-list/');
 
-    wrapper.innerHTML = '';
+    // wrapper.innerHTML = '';
+
     fetch(taskListURL)
         .then(response => response.json())
         .then(tasks => {
             for (let i in tasks) {
+                try {
+                    document.querySelector(`#data-row-${i}`).remove();
+                } catch (error) {
+
+                }
+
                 const title = tasks[i].completed ?
                     `<span class="title line-through">${tasks[i].title}</span>` :
                     `<span class="title">${tasks[i].title}</span>`;
@@ -115,6 +123,13 @@ function buildList() {
 
                 wrapper.innerHTML += item;
             }
+
+            if (tasksSnapshot.length > tasks.length) {
+                for (let i = tasks.length; i < tasksSnapshot.length; i++) {
+                    document.querySelector(`#data-row-${i}`).remove();
+                }
+            }
+            tasksSnapshot = tasks;
 
             for (let i in tasks) {
                 const editBtn = document.querySelectorAll('.edit')[i];
