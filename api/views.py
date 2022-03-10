@@ -1,3 +1,4 @@
+from ipware import get_client_ip
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -6,11 +7,23 @@ from .models import Task
 from .serializers import TaskHistorySerializer, TaskSerializer
 
 
-def create_task_history(db_task, deleted=False):
+def client_ip(request):
+    ip, is_routable = get_client_ip(request)
+    return '' if ip is None else ip
+
+
+def add_ip_to_task(request):
+    task = request.data
+    task['client_ip'] = client_ip(request)
+    return task
+
+
+def create_task_history(db_task, deleted=False, ip=None):
     task = {
         'title': db_task.title,
         'completed': db_task.completed,
         'deleted': deleted,
+        'client_ip': db_task.client_ip if ip is None else ip,
         'task': db_task.pk,
     }
 
@@ -47,7 +60,7 @@ def task_detail(request, pk):
 
 @api_view(['POST'])
 def task_create(request):
-    serializer = TaskSerializer(data=request.data)
+    serializer = TaskSerializer(data=add_ip_to_task(request))
 
     if serializer.is_valid():
         db_task = serializer.save()
@@ -59,7 +72,7 @@ def task_create(request):
 @api_view(['PUT'])
 def task_update(request, pk):
     task = get_object_or_404(Task, id=pk)
-    serializer = TaskSerializer(instance=task, data=request.data)
+    serializer = TaskSerializer(instance=task, data=add_ip_to_task(request))
 
     if serializer.is_valid():
         db_task = serializer.save()
@@ -71,7 +84,7 @@ def task_update(request, pk):
 @api_view(['DELETE'])
 def task_delete(request, pk):
     db_task = get_object_or_404(Task, id=pk)
-    create_task_history(db_task, deleted=True)
+    create_task_history(db_task, deleted=True, ip=client_ip(request))
     db_task.delete()
 
     return Response('Item successfully deleted!')

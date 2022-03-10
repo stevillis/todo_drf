@@ -12,6 +12,7 @@ class BaseModel(models.Model):
 class Task(BaseModel):
     title = models.CharField(max_length=200)
     completed = models.BooleanField(default=False, blank=True, null=True)
+    client_ip = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['completed', '-created']
@@ -24,6 +25,7 @@ class TaskHistory(BaseModel):
     title = models.CharField(max_length=200, blank=True, null=True)
     completed = models.BooleanField(default=False, blank=True, null=True)
     deleted = models.BooleanField(default=False, blank=True, null=True)
+    client_ip = models.CharField(max_length=255, blank=True, null=True)
     task = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name='tasks', blank=True, null=True)
 
     class Meta:

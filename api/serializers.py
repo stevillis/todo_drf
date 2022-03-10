@@ -12,4 +12,4 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskHistory
-        fields = ('title', 'completed', 'deleted', 'task')
+        fields = ('title', 'completed', 'deleted', 'task', 'client_ip')
