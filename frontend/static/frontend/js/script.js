@@ -120,7 +120,7 @@ function buildList() {
                                 </button>
                             </div>
                             <div style="flex:1">
-                                <button class="btn btn-sm btn-outline-dark delete">
+                                <button class="btn btn-sm btn-outline-danger delete">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
