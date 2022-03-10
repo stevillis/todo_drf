@@ -14,7 +14,7 @@ class Task(BaseModel):
     completed = models.BooleanField(default=False, blank=True, null=True)
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['completed', '-created']
 
     def __str__(self):
         return self.title
