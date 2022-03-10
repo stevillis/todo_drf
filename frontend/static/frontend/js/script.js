@@ -60,8 +60,11 @@ function getEndpointURL(endpoint) {
 }
 
 function editItem(item) {
+    const title = document.querySelector('#title');
+
     activeItem = item;
-    document.querySelector('#title').value = activeItem.title;
+    title.value = activeItem.title;
+    title.focus();
 }
 
 function deleteItem(item) {
