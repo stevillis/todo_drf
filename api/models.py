@@ -18,3 +18,16 @@ class Task(BaseModel):
 
     def __str__(self):
         return self.title
+
+
+class TaskHistory(BaseModel):
+    title = models.CharField(max_length=200, blank=True, null=True)
+    completed = models.BooleanField(default=False, blank=True, null=True)
+    deleted = models.BooleanField(default=False, blank=True, null=True)
+    task = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name='tasks', blank=True, null=True)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.title
