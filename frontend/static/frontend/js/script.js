@@ -18,7 +18,10 @@
  */
 
 
-const BASE_URL_API = 'http://127.0.0.1:8000/api/';
+const PROD_BASE_URL = 'https://todo-drf-vanillajs.herokuapp.com/';
+const DEV_BASE_URL = 'http://127.0.0.1:8000/';
+
+const API_URL = `${PROD_BASE_URL}api/`;
 let activeItem = null;
 let tasksSnapshot = [];
 
@@ -56,7 +59,7 @@ function makeRequest(requestURL, method, body) {
 }
 
 function getEndpointURL(endpoint) {
-    return `${BASE_URL_API}${endpoint}`;
+    return `${API_URL}${endpoint}`;
 }
 
 function editItem(item) {
