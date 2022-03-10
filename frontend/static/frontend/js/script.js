@@ -26,6 +26,17 @@ let activeItem = null;
 let tasksSnapshot = [];
 
 
+function formatDate(date) {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    const hour = date.getHours().toString().padStart(2, '0');
+    const second = date.getSeconds().toString().padStart(2, '0');
+
+    return `${day}/${month}/${year} ${hour}:${minute}:${second}`
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -106,20 +117,32 @@ function buildList() {
 
                 }
 
+                const created = new Date(tasks[i].created);
+                const updated = new Date(tasks[i].updated);
+                const createdFormated = formatDate(created);
+                const updatedFormated = formatDate(updated);
                 const title = tasks[i].completed ?
-                    `<span class="title line-through">${tasks[i].title}</span>` :
-                    `<span class="title">${tasks[i].title}</span>`;
+                    `<span id="task-title" class="title line-through">${tasks[i].title}</span>` :
+                    `<span id="task-title" class="title">${tasks[i].title}</span>`;
+
+                const taskDoneAt = tasks[i].completed ? `<br><small>Concluída em: ${updatedFormated}</small>` : '';
+
                 const item = `
                         <div id="data-row-${i}" class="task-wrapper flex-wrapper">
-                            <div style="flex:7">
+                            <div style="flex:7" class="data">
                                 ${title}
+                                <br>
+                                <small>
+                                    Criada em: ${createdFormated}
+                                </small>
+                                ${taskDoneAt}
                             </div>
-                            <div style="flex:1">
+                            <div style="flex:1" class="text-center">
                                 <button class="btn btn-sm btn-outline-info edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
                             </div>
-                            <div style="flex:1">
+                            <div style="flex:1" class="text-center">
                                 <button class="btn btn-sm btn-outline-danger delete">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
@@ -140,7 +163,7 @@ function buildList() {
             for (let i in tasks) {
                 const editBtn = document.querySelectorAll('.edit')[i];
                 const deleteBtn = document.querySelectorAll('.delete')[i];
-                const title = document.querySelectorAll('.title')[i];
+                const data = document.querySelectorAll('.data')[i];
 
                 editBtn.addEventListener('click', event => {
                     editItem(tasks[i]);
@@ -150,7 +173,7 @@ function buildList() {
                     deleteItem(tasks[i]);
                 });
 
-                title.addEventListener('click', event => {
+                data.addEventListener('click', event => {
                     strikeUnstrike(tasks[i]);
                 });
             }

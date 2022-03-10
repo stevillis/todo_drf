@@ -43,6 +43,8 @@ h1, h2, h3, h4, h5, p, span, strike {
     cursor: pointer;
     border-bottom: 1px solid #e9e9e9;
     color: #686868;
+
+    align-items: center;
 }
 
 .line-through {
@@ -60,4 +62,8 @@ h1, h2, h3, h4, h5, p, span, strike {
 
 .border-rounded-bottom {
     border-radius: 0 0 5px 5px;
+}
+
+.data:hover {
+    background-color: #fbfbfb;
 }
