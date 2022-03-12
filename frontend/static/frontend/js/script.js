@@ -53,10 +53,10 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function makeRequest(requestURL, method, body) {
+function makeRequest(endpoint, method, body) {
     const csrftoken = getCookie('csrftoken');
 
-    fetch(requestURL, {
+    fetch(`${API_URL}${endpoint}`, {
         method: method,
         headers: {
             'Content-Type': 'application/json',
@@ -69,10 +69,6 @@ function makeRequest(requestURL, method, body) {
     });
 }
 
-function getEndpointURL(endpoint) {
-    return `${API_URL}${endpoint}`;
-}
-
 function editItem(item) {
     const title = document.querySelector('#title');
 
@@ -82,14 +78,12 @@ function editItem(item) {
 }
 
 function deleteItem(item) {
-    const requestURL = getEndpointURL(`task-delete/${item.id}/`);
     const method = 'DELETE';
 
-    makeRequest(requestURL, method, null);
+    makeRequest(`task-delete/${item.id}/`, method, null);
 }
 
 function strikeUnstrike(item) {
-    const requestURL = getEndpointURL(`task-update/${item.id}/`);
     const method = 'PUT';
     const body = JSON.stringify(
         {
@@ -98,16 +92,15 @@ function strikeUnstrike(item) {
         }
     );
 
-    makeRequest(requestURL, method, body);
+    makeRequest(`task-update/${item.id}/`, method, body);
 }
 
 function buildList() {
     const wrapper = document.querySelector('#list-wrapper');
-    const taskListURL = getEndpointURL('task-list/');
 
     // wrapper.innerHTML = '';
 
-    fetch(taskListURL)
+    fetch(`${API_URL}task-list/`)
         .then(response => response.json())
         .then(tasks => {
             for (let i in tasks) {
@@ -178,7 +171,6 @@ function buildList() {
                 });
             }
         });
-
 }
 
 function main() {
@@ -191,16 +183,16 @@ function main() {
         const title = document.querySelector('#title').value;
         const body = JSON.stringify({'title': title});
 
-        let requestURL = getEndpointURL('task-create/');
+        let endpoint = 'task-create/';
         let method = 'POST';
 
         if (activeItem) {
-            requestURL = getEndpointURL(`task-update/${activeItem.id}/`);
+            endpoint = `task-update/${activeItem.id}/`;
             method = 'PUT';
             activeItem = null;
         }
 
-        makeRequest(requestURL, method, body);
+        makeRequest(endpoint, method, body);
     });
 }
 
