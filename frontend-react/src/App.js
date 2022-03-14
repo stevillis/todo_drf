@@ -144,9 +144,7 @@ class App extends Component {
             <form id="form" onSubmit={this.handleSubmit}>
               <div className="flex-wrapper">
                 <div style={{ flex: 6 }}>
-                  <input type="text" id="title" name="title" value={this.state.activeItem.title}
-                    className="form-control" placeholder="Add task" maxLength="60"
-                    onChange={this.handleChange} />
+                  <input type="text" id="title" name="title" value={this.state.activeItem.title} className="form-control" placeholder="Add task" maxLength="60" onChange={this.handleChange} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <button id="submit" className="btn btn-outline-success" type="submit">
@@ -167,12 +165,10 @@ class App extends Component {
                 const dataRowId = `data-row-${index}`;
                 return (
                   <div key={index} id={dataRowId} className="task-wrapper flex-wrapper">
-                    <div style={{ flex: 7 }} className="data"
-                      onClick={() => self.strikeUnstrike(task)}>
+                    <div style={{ flex: 7 }} className="data" onClick={() => self.strikeUnstrike(task)}>
                       {
                         task.completed ?
-                          <span id="task-title"
-                            className="title line-through">{task.title}</span> :
+                          <span id="task-title" className="title line-through">{task.title}</span> :
                           <span id="task-title" className="title">{task.title}</span>
                       }
                       <br />
@@ -180,19 +176,16 @@ class App extends Component {
                         Criada em: {createdFormated}
                       </small>
                       {
-                        task.completed ?
-                          <span><br /><small>Concluída em: {updatedFormated}</small></span> : ''
+                        task.completed ? <span><br /><small>Concluída em: {updatedFormated}</small></span> : ''
                       }
                     </div>
-                    <div style={{ flex: 1 }} className="text-center"
-                      onClick={() => self.startEdit(task)}>
+                    <div style={{ flex: 1 }} className="text-center" onClick={() => self.startEdit(task)}>
                       <button className="btn btn-sm btn-outline-info edit">
                         <i className="fa-solid fa-pencil"></i>
                       </button>
                     </div>
                     <div style={{ flex: 1 }} className="text-center">
-                      <button className="btn btn-sm btn-outline-danger delete"
-                        onClick={() => self.deleteTask(task)}>
+                      <button className="btn btn-sm btn-outline-danger delete" onClick={() => self.deleteTask(task)}>
                         <i className="fa-solid fa-trash"></i>
                       </button>
                     </div>
@@ -202,6 +195,17 @@ class App extends Component {
             }
           </div>
         </div>
+        <footer>
+          <ul class="d-flex justify-content-center list-unstyled">
+            <li class="mx-4">
+              <a href="https://www.linkedin.com/in/stevillis/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </li>
+            <li class="mx-4">
+              <a href="https://github.com/stevillis" target="_blank"><i class="fab fa-github"></i></a>
+            </li>
+          </ul>
+          <p class="text-black text-center">2022 - Stévillis Sousa</p>
+        </footer>
       </div>
     );
   }
