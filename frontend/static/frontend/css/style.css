@@ -7,6 +7,23 @@ h1, h2, h3, h4, h5, p, span, strike {
     font-family: 'Montserrat', sans-serif;
 }
 
+footer {
+    padding-top: 200px;
+}
+
+footer ul {
+    font-size: 2rem;
+}
+
+footer i {
+    color: #242426;
+}
+
+footer i:hover {
+    background-color: #21e3b4;
+    color: #fff;
+}
+
 #task-container {
     max-width: 600px;
     margin: 10px auto 100px auto;
