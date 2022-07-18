@@ -18,7 +18,7 @@ definitions:
            # checking for errors
           - python manage.py check --settings todo_drf.settings
           # run tests analysing them with
-          - python manage.py test --keepdb --settings todo_drf.settings predictor.tests
+          - python manage.py test --keepdb --settings todo_drf.settings api.tests
         services:
           - docker
 
