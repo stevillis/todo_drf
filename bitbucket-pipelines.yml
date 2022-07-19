@@ -1,0 +1,28 @@
+image: python:3.10
+
+options:
+  max-time: 30   # steps cannot take more than 30 minutes
+  docker: true
+
+definitions:
+  steps:
+    - step: &build-test
+        caches:
+          - pip
+          - docker
+        name: Build and Test
+        script:
+          - pip install -r requirements.txt
+          # check if is lacking migrations
+          - python manage.py makemigrations --settings todo_drf.settings --check --dry-run
+           # checking for errors
+          - python manage.py check --settings todo_drf.settings
+          # run tests analysing them with
+          - python manage.py test --keepdb --settings todo_drf.settings api.tests
+        services:
+          - docker
+
+pipelines:
+  pull-requests:
+    '{feature/*,bugfix/*,hotfix/*,release/*}':
+      - step: *build-test
